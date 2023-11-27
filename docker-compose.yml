@@ -1,0 +1,49 @@
+version: "3"
+
+networks:
+  backend:
+    driver: bridge
+
+volumes:
+  mysql-database:
+    driver: local
+
+services:
+  ### PHP MyAdmin ##################################
+  phpmyadmin:
+    container_name: phpmyadmin
+    image: phpmyadmin/phpmyadmin
+    platform: linux/amd64
+    ports:
+      - 8888:80
+    environment:
+      PMA_HOST: mysql80
+      PMA_USER: db_user
+      PMA_PASSWORD: [REDACTED]
+    networks:
+      - backend
+    depends_on:
+      mysql:
+        condition: service_healthy
+
+  ### DATABASE MySQL ##################################
+  mysql:
+    container_name: mysql80
+    image: mysql:8.0
+    environment:
+      MYSQL_ROOT_PASSWORD: [REDACTED]
+      MYSQL_USER: db_user
+      MYSQL_PASSWORD: [REDACTED]
+      MYSQL_DATABASE: base-eccube-mysql.local
+    volumes:
+      - mysql-database:/var/lib/mysql
+      - ./dump:/dump
+    ports:
+      - 13306:3306
+    networks:
+      - backend
+    healthcheck:
+      test: mysqladmin ping
+      interval: 3s
+      timeout: 3s
+      retries: 3

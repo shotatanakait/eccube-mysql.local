@@ -15,7 +15,7 @@ services:
     image: phpmyadmin/phpmyadmin
     platform: linux/amd64
     ports:
-      - 8888:80
+      - 9999:80
     environment:
       PMA_HOST: mysql80
       PMA_USER: db_user

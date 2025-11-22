@@ -13,11 +13,11 @@ services:
     image: phpmyadmin/phpmyadmin
     platform: linux/amd64
     ports:
-      - 9999:80
+      - "${PHPMYADMIN_PORT:-8888}:80"
     environment:
       PMA_HOST: mysql80
-      PMA_USER: db_user
-      PMA_PASSWORD: [REDACTED]
+      PMA_USER: ${MYSQL_USER:-mysql_user}
+      PMA_PASSWORD: ${MYSQL_PASSWORD:-mysql_password}
     networks:
       - backend
     depends_on:
@@ -30,16 +30,16 @@ services:
     image: mysql:8.0
     platform: linux/amd64
     environment:
-      MYSQL_ROOT_PASSWORD: [REDACTED]
-      MYSQL_USER: db_user
-      MYSQL_PASSWORD: [REDACTED]
-      MYSQL_DATABASE: base-eccube-mysql.local
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD:-mysql_root_password}
+      MYSQL_USER: ${MYSQL_USER:-mysql_user}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD:-mysql_password}
+      MYSQL_DATABASE: ${MYSQL_DATABASE:-mysql_database}
     volumes:
       - mysql-database:/var/lib/mysql
       - ./dump:/dump
       - ./mysql/my.cnf:/etc/mysql/conf.d/my.cnf
     ports:
-      - 13306:3306
+      - "${MYSQL_PORT:-3306}:3306"
     networks:
       - backend
     healthcheck:

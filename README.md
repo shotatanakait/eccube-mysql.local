@@ -1,16 +1,22 @@
-# START CONTAINER
+# Define .env
+
+```sh
+cp .env.example .env
+```
+
+# Start container
 
 ```shell
 docker-compose up -d
 ```
 
-# SHOW CONTAINER STATUS
+# Show container status
 
 ```shell
 docker-compose ps -a
 ```
 
-# USE CASE FOR EC-CUBE
+# Use case for EC-CUBE
 
 1. git clone eccube-repository
 
@@ -26,23 +32,23 @@ git clone git@github.com:EC-CUBE/ec-cube.git
 docker exec -it mysql80 /bin/bash
 mysql -u root -p
 # mysql prompt
-create database database1;
-grant all on database1.* to db_user@'%';
+create database mysql_database;
+grant all on mysql_database.* to user@'%';
 exit
 # check by db_user
 mysql -u db_user -p
 show databases;
-use database1;
+use mysql_database;
 ```
 
 3. edit .env file
 
 ```env
-DATABASE_USER="db_user"
-DATABASE_PASSWORD="[REDACTED]"
-DATABASE_HOST="127.0.0.1" # localhost is NG
-DATABASE_PORT="13306"
-DATABASE_NAME="base-eccube-mysql.local" # or database1 (if create database1)
+DATABASE_USER="user"
+DATABASE_PASSWORD="password"
+DATABASE_HOST="127.0.0.1"
+DATABASE_PORT="3306"
+DATABASE_NAME="mysql_database"
 DATABASE_URL=mysql://${DATABASE_USER}:${DATABASE_PASSWORD}@${DATABASE_HOST}:${DATABASE_PORT}/${DATABASE_NAME}
 ```
 
@@ -66,7 +72,7 @@ symfony console eccube:install -n # then create tables
 symfony server:start
 ```
 
-# CLOSE CONTAINER
+# Close container
 
 ```
 docker-compose down

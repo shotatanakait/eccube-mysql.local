@@ -28,6 +28,7 @@ services:
   mysql:
     container_name: mysql80
     image: mysql:8.0
+    platform: linux/amd64
     environment:
       MYSQL_ROOT_PASSWORD: [REDACTED]
       MYSQL_USER: db_user
